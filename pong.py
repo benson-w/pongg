@@ -103,9 +103,34 @@ def update_p1(action, p1_y):
         p1_y = 0
     if (p1_y > w_height - p_height):
         p1_y = w_height - p_height
+    
     return p1_y
 
 def update_p2(p2_y, ball_y):
     # move down if ball is in upper half 
-    if (p2_y + p_height / 2 < ball_y + b_height):
-        print(hi)
+    if (p2_y + p_height / 2 < ball_y + b_height / 2):
+        p2_y = p2_y + p_speed 
+    # move up if ball is in lower half
+    if (p2_y + p_height / 2 > ball_y + b_height / 2):
+        p2_y = p2_y - p_speed
+    # prevent from going offscreen
+    if (p2_y < 0):
+        p2_y = 0
+    if (p2_y > w_height - p_height):
+        p2_y = w_height - p_height
+    
+    return p2_y
+
+# game class 
+class PongGame:
+    def __init__(self):
+        self.tally = 0                              # score 
+        self.p1_y = w_height / 2 - p_height / 2     # initial paddle pos
+        self.p2_y = w_height / 2 - p_height / 2
+        self.ball_x_dir = 1                         # initial ball dir
+        self.ball_y_dir = 1
+        self.ball_x = w_width / 2 - b_width / 2     # initial ball pos
+
+        num = random.randint(0, 4)
+        if (0 < num < 1):
+            self.ball_x_dir = 1
