@@ -150,14 +150,44 @@ class PongGame:
     def getPresentFrame(self):
         #for each from call the event queue
         
-        # draw things one by one
-        pygame.event.pump()
+        pygame.event.pump()                 #draw things one by one
         screen.fill(black)
         drawP1(self.p1_y)
         drawP2(self.p2_y)
         drawBall(self.ball_x, self.ball_y) 
-    
+       
         # copies pixels to a 3d array so we can use for reinforcement learning
         image_data = pygame.surfarray.array3d(pygame.display.get_surface())
         
-        # updates the window
+        pygame.display.flip()  # updates the window
+        
+        return image_data       # return our surface data
+
+    def getNextFrame(self):
+        # update frame
+        pygame.event.pump()
+        score = 0
+        screen.fill(black)
+        self.p1_y = update_p1(action, self.p1_y)    #update ai paddle
+        drawP1(self.p1_y)
+        self.p2_y = update_p2(action, self.p1_y)    #update our player
+        drawP2(self.p2_y)
+        
+        #update variables
+        [score, self.p1_y, self.p2_y, self.ball_x, self.ball_y, 
+                self.ball_x_dir, self.ball_y_dir] = updateBall(self.p1_y,
+                        self.p2_y, self.ball_x, self.ball_y, self.ball_x_dir,
+                        self.ball_y_dir)
+
+        drawBall(sef.ball_x, self.ball_y) #draw ball 
+
+        # copy pixels to a 3d array so we can use later for learning
+        image_data = pygame.surfarray.array3d(pygame.display.get_surface())
+        
+        pygame.display.flip()   #update window
+
+        self.tally = self.tally + score #record score
+        print("Taly is " + str(self.tally))
+        
+        return [score, image_data]
+        
