@@ -134,3 +134,30 @@ class PongGame:
         num = random.randint(0, 4)
         if (0 < num < 1):
             self.ball_x_dir = 1
+            self.ball_y_dir = 1
+        elif (1 <= num < 2):
+            self.ball_x_dir = -1
+            self.ball_y_dir = 1
+        elif (2 <= num < 3):
+            self.ball_x_dir = 1
+            self.ball_y_dir = -1
+        elif (3 <= num < 4):
+            self.ball_x_dir = -1
+            self.ball_y_dir = -1
+        num = random.randomint(0, 9)
+        self.ball_y = num * (w_height - b_height) / 9
+
+    def getPresentFrame(self):
+        #for each from call the event queue
+        
+        # draw things one by one
+        pygame.event.pump()
+        screen.fill(black)
+        drawP1(self.p1_y)
+        drawP2(self.p2_y)
+        drawBall(self.ball_x, self.ball_y) 
+    
+        # copies pixels to a 3d array so we can use for reinforcement learning
+        image_data = pygame.surfarray.array3d(pygame.display.get_surface())
+        
+        # updates the window
