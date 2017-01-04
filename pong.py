@@ -36,12 +36,14 @@ def drawBall(ball_x, ball_y):
     pygame.draw.rect(screen, white, ball)
 
 def drawP1(p1_y):
+    print("p1_y: " + str(p1_y))
     p1 = pygame.Rect(p_buffer, p1_y, p_width, p_height)
     pygame.draw.rect(screen, white, p1)
 
 def drawP2(p2_y):
+    print("p2_y: " + str(p2_y))
     p2 = pygame.Rect(w_width - p_buffer - p_width, p2_y, p_width, p_height)
-    pygme.draw.rect(screen, white, p2)
+    pygame.draw.rect(screen, white, p2)
 
 def updateBall(p1_y, p2_y, ball_x, ball_y, ball_x_dir, ball_y_dir):
 
@@ -107,11 +109,12 @@ def update_p1(action, p1_y):
     return p1_y
 
 def update_p2(p2_y, ball_y):
+    print("update_p2, p2_y=, ball_y=" + str(p2_y) + str(ball_y))
     # move down if ball is in upper half 
-    if (p2_y + p_height / 2 < ball_y + b_height / 2):
+    if (p2_y + p_height/2 < ball_y + b_height/2):
         p2_y = p2_y + p_speed 
     # move up if ball is in lower half
-    if (p2_y + p_height / 2 > ball_y + b_height / 2):
+    if (p2_y + p_height/2 > ball_y + b_height/2):
         p2_y = p2_y - p_speed
     # prevent from going offscreen
     if (p2_y < 0):
@@ -144,8 +147,9 @@ class PongGame:
         elif (3 <= num < 4):
             self.ball_x_dir = -1
             self.ball_y_dir = -1
-        num = random.randomint(0, 9)
+        num = random.randint(0, 9)
         self.ball_y = num * (w_height - b_height) / 9
+        print("init self.ball_y:" + str(self.ball_y))
 
     def getPresentFrame(self):
         #for each from call the event queue
@@ -163,7 +167,7 @@ class PongGame:
         
         return image_data       # return our surface data
 
-    def getNextFrame(self):
+    def getNextFrame(self, action):
         # update frame
         pygame.event.pump()
         score = 0
@@ -179,7 +183,9 @@ class PongGame:
                         self.p2_y, self.ball_x, self.ball_y, self.ball_x_dir,
                         self.ball_y_dir)
 
-        drawBall(sef.ball_x, self.ball_y) #draw ball 
+        
+
+        drawBall(self.ball_x, self.ball_y) #draw ball 
 
         # copy pixels to a 3d array so we can use later for learning
         image_data = pygame.surfarray.array3d(pygame.display.get_surface())
@@ -187,7 +193,7 @@ class PongGame:
         pygame.display.flip()   #update window
 
         self.tally = self.tally + score #record score
-        print("Taly is " + str(self.tally))
+        print("Tally is " + str(self.tally))
         
         return [score, image_data]
         
